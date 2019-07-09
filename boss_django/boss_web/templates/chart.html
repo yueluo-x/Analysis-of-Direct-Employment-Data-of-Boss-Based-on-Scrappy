@@ -1,0 +1,66 @@
+{% extends 'base_web.html' %}
+{% load static %}
+{% block context %}
+<style type="text/css">
+#container {
+	min-width: 320px;
+	max-width: 800px;
+	margin: 0 auto;
+}
+</style>
+<div id="container" ></div>
+<!--<div id="contain" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>-->
+
+{% endblock %}
+{% block chart_js %}
+
+<script>
+Highcharts.chart('container', {
+    chart: {
+        type: 'packedbubble',
+        height: '100%'
+    },
+    title: {
+        text: '平均薪资气泡图'
+    },
+    tooltip: {
+        useHTML: true,
+        pointFormat: '<b>{point.name}:</b> {point.y}K 元'
+    },
+    credits : { // 网站标识
+            enabled : false
+     },
+    plotOptions: {
+        packedbubble: {
+            minSize: '30%',
+            maxSize: '120%',
+            zMin: 0,
+            zMax: 1000,
+            layoutAlgorithm: {
+                splitSeries: false,
+                gravitationalConstant: 0.02
+            },
+            dataLabels: {
+                enabled: true,
+                format: '{point.name}',
+                filter: {
+                    property: 'y',
+                    operator: '>',
+                    value: 20
+                },
+                style: {
+                    color: 'black',
+                    textOutline: 'none',
+                    fontWeight: 'normal'
+                }
+            }
+        }
+    },
+    series: {{ series|safe }}
+
+});
+
+</script>
+
+{% endblock %}
+

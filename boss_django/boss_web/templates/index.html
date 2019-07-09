@@ -1,0 +1,111 @@
+{% extends 'base_web.html' %}
+{% load static %}
+{% block context %}
+<style>
+#jz{ margin:0 auto; width:320px; height:100px; border:1px solid #F00}
+</style>
+<div class="ui equal width grid" style="margin:5px 0 5px 0;width:70%">
+    <div class="row">
+        <div class="column">
+            <div class="ui red segment">
+                <div class="ui statistic">
+                    <div class="value">
+                        {{ counts }}
+                    </div>
+                    <div class="label">
+                        总职位数
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="ui blue segment">
+                <div class="ui statistic">
+                    <div class="value">
+                        {{ job_orientation }}
+                    </div>
+                    <div class="label">
+                        就业方向
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form action="http://localhost:8000/search/" method="post">
+                <div class="ui labeled input">
+                    <div class="ui label">就业方向：</div>
+                    <input id ="s_input" type="text" placeholder="Search..." name="type" list="cars" autocomplete="off">
+                    <datalist id="cars">
+                        {% for type1 in search_type %}
+                        <option value="{{ type1 }}">
+                        {% endfor %}
+                    </datalist>
+                </div>
+                <button class="ui button">搜索</button>
+        </form>
+    </div>
+
+
+
+
+
+<div class="row">
+    <div class="column">
+        <div class="ui container segment">
+            <!--列表-->
+            <div class="ui divided items">
+                {% for item in CareerInfo %}
+                <div class="item">
+                    <div class="content">
+                        <a class="header">{{ item.title }}</a>
+                        <div class="meta">
+                            <span class="cinema">公司：{{ item.company }}</span>
+                            <span class="cinema">工作地点：{{ item.location }}</span>
+                            <span class="cinema">学历：{{ item.education }}</span>
+                        </div>
+                        <div class="extra">
+                            <p>经验：{{ item.experience }}</p>
+                        </div>
+                        <div class="description">
+                            <p>薪水：{{ item.salary }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <!--分页-->
+            <div class="ui pagination menu">
+                <a class="{% if not CareerInfo.has_previous %}disabled{% endif %} item"
+                   href="?page=1">
+                    首页
+                </a>
+                {% if CareerInfo.has_previous %}
+                <a class="{% if not CareerInfo.has_previous %}disabled{% endif %} item"
+                   href="?page={{ CareerInfo.previous_page_number }}">
+                    <i class="left arrow icon"></i>
+                </a>
+                {% endif %}
+                <!--页码-->
+                {% for num in CareerInfo.paginator.page_range_ext %}
+                <a class=" {% if CareerInfo.number == num %}active {% endif %} item" href="?page={{ num }}">{{ num }}</a>
+                {% endfor %}
+                <!--下一页-->
+                {% if CareerInfo.has_next %}
+                <a class="{% if not CareerInfo.has_next %}disabled {% endif %} item"
+                   href="?page={{ CareerInfo.next_page_number }}">
+                    <i class="right arrow icon"></i>
+                </a>
+                {% endif %}
+                <a class="{% if not CareerInfo.has_next %}disabled {% endif %} item"
+                   href="?page= {{ CareerInfo.paginator.num_pages }}">
+                   尾页
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+
+{% endblock %}

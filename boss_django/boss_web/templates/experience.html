@@ -1,0 +1,133 @@
+{% extends 'base_web.html' %}
+{% load static %}
+{% block context %}
+
+<div id="container" style="min-width: 310px; height: 400px; max-width: 1200px; margin: 0 auto"></div>
+<div id="contain" ></div>
+
+{% endblock %}
+{% block chart_js %}
+<script>
+Highcharts.chart('contain', {
+	chart: {
+		type: 'column'
+	},
+	title: {
+		text: '工作经验比例分布图'
+	},
+	credits : { // 网站标识
+            enabled : false
+    },
+	subtitle: {
+		text: '应届生及经验不限归于一年以下'
+	},
+	xAxis: {
+		type: 'category'
+	},
+	yAxis: {
+		title: {
+			text: '不同工作经验比例'
+		}
+	},
+	legend: {
+		enabled: false
+	},
+	plotOptions: {
+		series: {
+			borderWidth: 0,
+			dataLabels: {
+				enabled: true,
+				format: '{point.y:.1f}%'
+			}
+		}
+	},
+	tooltip: {
+		headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+		pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+	},
+	series: [{
+		name: '工作经验',
+		colorByPoint: true,
+		data:{{ data_list | safe }}
+	}],
+});
+</script>
+<script>
+var data ={{ data|safe }} ;
+
+var points = [],
+		region_p,
+		region_val,
+		region_i,
+		country_p,
+		country_i,
+		cause_p,
+		cause_i,
+		cause_name = [];
+region_i = 0;
+for (var region in data) {
+		region_val = 0;
+		region_p = {
+				id: "id_" + region_i,
+				name: region,
+				color: Highcharts.getOptions().colors[region_i]
+		};
+		country_i = 0;
+		for (var country in data[region]) {
+				country_p = {
+						id: region_p.id + "_" + country_i,
+						name: country,
+						parent: region_p.id
+				};
+				points.push(country_p);
+				cause_i = 0;
+				for (var cause in data[region][country]) {
+						cause_p = {
+								id: country_p.id + "_" + cause_i,
+								name: cause,
+								parent: country_p.id,
+								value: Math.round(+data[region][country][cause])
+						};
+						region_val += cause_p.value;
+						points.push(cause_p);
+						cause_i++;
+				}
+				country_i++;
+		}
+		region_p.value = Math.round(region_val );
+		points.push(region_p);
+		region_i++;
+}
+var chart = new Highcharts.Chart({
+		chart: {
+				renderTo: 'container'
+		},
+		series: [{
+				type: "treemap",
+				layoutAlgorithm: 'squarified',
+				allowDrillToNode: true,
+				dataLabels: {
+						enabled: false
+				},
+				levelIsConstant: false,
+				levels: [{
+						level: 1,
+						dataLabels: {
+								enabled: true
+						},
+						borderWidth: 3
+				}],
+				data: points
+		}],
+        credits : { // 网站标识
+            enabled : false//版权为fals 就不会再显示highcharts的logo。
+        },
+		title: {
+				text: '各就业方向工作经验分布图'
+		}
+});
+
+</script>
+
+{% endblock %}
+

@@ -1,0 +1,85 @@
+{% load static %}
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'css/semantic.css'%}">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/semantic.js' %}"></script>
+    <script src="{% static 'js/exporting.js' %}"></script>
+    <script src="{% static 'js/highcharts.js' %}"></script>
+    <script src="{% static 'js/highcharts-more.js' %}"></script>
+    <script src="{% static 'js/highcharts-zh_CN.js' %}"></script>
+
+    <script src="../static/js/treemap.js "></script>
+    <script src="../static/js/heatmap.js "></script>
+</head>
+
+<body>
+<div class="ui thin visible left sidebar inverted vertical menu">
+    <div class="header item">
+        <img src="{% static 'images/logo2.png' %}">
+    </div>
+    <a class="item" href="http://localhost:8000/index/">
+        职位信息
+        <i class="browser icon"></i>
+    </a>
+    <a class="item" href="http://localhost:8000/chart/">
+        Charts
+        <i class="bar chart icon"></i>
+    </a>
+    <a class="item" href="http://localhost:8000/salary/">
+        薪资
+        <i class="bar chart icon"></i>
+    </a>
+    <a class="item" href="http://localhost:8000/education/">
+        学历分布
+        <i class="bar chart icon"></i>
+    </a>
+    <a class="item" href="http://localhost:8000/experience/">
+        工作经验
+        <i class="bar chart icon"></i>
+    </a>
+    <div class="item">
+        Others
+        <i class="idea icon"></i>
+    </div>
+</div>
+
+<div class="pusher">
+    <div class="ui menu">
+        <div class="header item" id="menu">
+            Menu
+            <i class="content icon"></i>
+        </div>
+        <a class="item" href="http://localhost:8000/index/">
+            职位信息
+        </a>
+        <a class="item" href="http://localhost:8000/chart/">
+            Charts
+        </a>
+        <a class="item" href="http://localhost:8000/salary/">
+            薪资
+        </a>
+        <a class="item" href="http://localhost:8000/education/">
+            学历分布
+        </a>
+        <a class="item" href="http://localhost:8000/experience/">
+            工作经验
+        </a>
+    </div>
+    {% block context %} {% endblock %}
+</div>
+
+<script>
+    $('#menu').click(function () {
+      $('.ui.sidebar').sidebar('toggle');
+    });
+
+
+</script>
+{% block chart_js %}
+{% endblock %}
+</body>
+</html>

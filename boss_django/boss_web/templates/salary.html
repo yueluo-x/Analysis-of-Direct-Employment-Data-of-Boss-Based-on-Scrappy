@@ -1,0 +1,105 @@
+
+
+{% extends 'base_web.html' %}
+{% load static %}
+{% block context %}
+<div id="container" style="min-width: 1200px; height: 1000px;  margin: 0 auto"></div>
+<div id="contain" style="min-width:400px;height:400px"></div>
+
+{% endblock %}
+
+
+{% block chart_js %}
+<script>
+var chart = Highcharts.chart('container', {
+	chart: {
+		type: 'columnrange', // columnrange 依赖 highcharts-more.js
+		inverted: true
+	},
+	title: {
+		text: '平均薪资'
+	},
+	subtitle: {
+		text: ' '
+	},
+	xAxis: {
+		categories: {{ categories|safe }}
+		<!--['后端开发', 'Java', 'C++', 'PHP', '数据挖掘', 'C', 'C#', '.NET', 'Hadoop', 'Python', 'Delphi', 'VB', 'Perl', 'Ruby', 'Node.js']-->
+	},
+	yAxis: {
+		title: {
+			text: '人民币 ( K元)'
+		}
+	},
+	tooltip: {
+		valueSuffix: 'K'
+	},
+	plotOptions: {
+		columnrange: {
+			dataLabels: {
+				enabled: true,
+				formatter: function () {
+					return this.y + 'K';
+				}
+			}
+		}
+	},
+	legend: {
+		enabled: false
+	},
+	credits : { // 网站标识
+            enabled : false
+    },
+	series: [{
+		name: '月薪',
+		data: {{ salary_data|safe }}
+
+	}]
+});
+</script>
+<script>
+var chart = Highcharts.chart('contain', {
+	chart: {
+		type: 'column'
+	},
+	title: {
+		text: '主要城市平均薪资排行'
+	},
+
+	xAxis: {
+		type: 'category',
+		labels: {
+			rotation: -45  // 设置轴标签旋转角度
+		}
+	},
+	yAxis: {
+		min: 0,
+		title: {
+			text: 'K元'
+		}
+	},
+	credits : { // 网站标识
+            enabled : false
+     },
+	legend: {
+		enabled: false
+	},
+	tooltip: {
+		pointFormat: '平均薪资: <b>{point.y:.1f} K元</b>'
+	},
+	series: [{
+		name: '平均薪资',
+		data: {{ data |safe }},
+		dataLabels: {
+			enabled: true,
+			rotation: -90,
+			color: '#FFFFFF',
+			align: 'right',
+			format: '{point.y:.1f}', // :.1f 为保留 1 位小数
+			y: 10
+		}
+	}]
+});
+</script>
+{% endblock %}
+
